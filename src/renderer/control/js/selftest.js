@@ -2,7 +2,7 @@
 // importants et capture les deux fenêtres, avec la luminosité moyenne de la sortie,
 // pour vérifier que le projecteur reste noir quand il le doit.
 
-export async function runSelftest({ state, engine, actions, addVideos, rt, editCue }) {
+export async function runSelftest({ state, engine, actions, addVideos, rt, editCue, previewUpdate }) {
   const api = window.projee;
   const t0 = performance.now();
   const log = (m) => api.invoke('selftest:log', `${((performance.now() - t0) / 1000).toFixed(2)}s ${m}`);
@@ -28,6 +28,12 @@ export async function runSelftest({ state, engine, actions, addVideos, rt, editC
       await sleep(800);
       log(`sortie : ${JSON.stringify(await api.invoke('selftest:outputInfo'))}`);
       await shot('01-demarrage');
+
+      log(`mise à jour : ${JSON.stringify(await api.invoke('update:check'))}`);
+      previewUpdate({ status: 'available', version: '9.9.9', current: state.info.version, url: '', page: '' });
+      await sleep(100);
+      await shot('01b-bandeau-mise-a-jour');
+      document.getElementById('updateLater').click();
 
       await addVideos(state.info.selftestFiles);
       await waitFor('analyse', () => state.cues.every((c) => rt(c.id).status && rt(c.id).status !== 'loading'));

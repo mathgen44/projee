@@ -28,6 +28,11 @@ export function openSettings(settings, info, onSave) {
           <option value="false" ${!settings.preview ? 'selected' : ''}>Désactivé (économise le processeur)</option>
         </select></label>
 
+        <label class="row"><span>Mises à jour</span><select name="checkUpdates">
+          <option value="true" ${settings.checkUpdates ? 'selected' : ''}>Rechercher au lancement</option>
+          <option value="false" ${!settings.checkUpdates ? 'selected' : ''}>Ne pas rechercher (menu ☰ pour le faire à la main)</option>
+        </select></label>
+
         <h3>Avant le spectacle</h3>
         <ul class="hint">
           <li>Branchez le projecteur en mode <strong>Étendre</strong> (Windows : touche Windows + P), pas en mode Dupliquer.</li>
@@ -54,6 +59,7 @@ export function openSettings(settings, info, onSave) {
       playlistGap: n('playlistGap'),
       pauseOnBlack: $('[name=pauseOnBlack]', dlg).value === 'true',
       preview: $('[name=preview]', dlg).value === 'true',
+      checkUpdates: $('[name=checkUpdates]', dlg).value === 'true',
     });
   };
   dlg.returnValue = '';

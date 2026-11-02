@@ -7,6 +7,7 @@
   "author": "Hervé Sevellec",
   "license": "MIT",
   "private": true,
+  "repository": "github:mathgen44/projee",
   "scripts": {
     "start": "electron .",
     "selftest": "electron . --selftest",
@@ -32,6 +33,14 @@
         "role": "Editor"
       }
     ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "mathgen44",
+        "repo": "projee",
+        "releaseType": "draft"
+      }
+    ],
     "win": {
       "target": [
         "nsis",
@@ -40,7 +49,11 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "Projee-${version}-Windows-installation.${ext}"
+    },
+    "portable": {
+      "artifactName": "Projee-${version}-Windows-portable.${ext}"
     },
     "mac": {
       "target": [
@@ -51,7 +64,12 @@
           ]
         }
       ],
-      "category": "public.app-category.video"
+      "category": "public.app-category.video",
+      "identity": "-",
+      "hardenedRuntime": false
+    },
+    "dmg": {
+      "artifactName": "Projee-${version}-Mac.${ext}"
     }
   }
 }

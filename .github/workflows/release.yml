@@ -1,0 +1,55 @@
+# Construit Projee pour Windows et Mac et publie les fichiers dans une version GitHub.
+# Déclenchement : pousser une étiquette de version, par exemple
+#   git tag v0.2.0 && git push origin v0.2.0
+# (le numéro doit correspondre au champ "version" de package.json).
+#
+# La version est d'abord créée en brouillon ; elle n'est publiée (et donc proposée
+# aux utilisateurs par la recherche de mises à jour) que si Windows et Mac sont prêts.
+name: Publier une version
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Créer la version en brouillon
+        run: gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft --title "Projee ${GITHUB_REF_NAME#v}" --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    needs: draft
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Construire et envoyer les fichiers
+        run: npx electron-builder --publish always
+        env:
+          # Sans certificat Apple, l'app Mac reçoit une signature « ad hoc » (package.json, mac.identity).
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publier la version
+        run: gh release edit "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft=false --latest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

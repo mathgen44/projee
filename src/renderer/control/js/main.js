@@ -640,6 +640,52 @@ async function toggleLock() {
   renderAll();
 }
 
+// ---------- Mises à jour ----------
+
+let pendingUpdate = null;
+
+async function checkUpdates(manual = false) {
+  const r = await api.invoke('update:check');
+  if (r.status === 'available') {
+    pendingUpdate = r;
+    showUpdateBanner();
+  } else if (manual) {
+    if (r.status === 'uptodate') toast(`Projee ${r.current} est à jour.`, 'ok');
+    else if (r.status === 'none') toast('Aucune version n’a encore été publiée.');
+    else toast(`Impossible de vérifier les mises à jour (${r.message}). L’ordinateur est-il connecté à Internet ?`, 'error', 8000);
+  }
+}
+
+// Le bandeau décale l'interface : on attend qu'aucune vidéo ne joue pour l'afficher.
+function showUpdateBanner() {
+  if (!pendingUpdate) return;
+  if (engine.isActive()) {
+    setTimeout(showUpdateBanner, 5000);
+    return;
+  }
+  const r = pendingUpdate;
+  $('#updateText').textContent = `Projee ${r.version} est disponible (vous avez la version ${r.current}).`;
+  $('#updateBanner').hidden = false;
+}
+
+function bindUpdateBanner() {
+  $('#updateDownload').addEventListener('click', () => {
+    api.invoke('update:open', pendingUpdate.url);
+    toast(updateInstallHint(), '', 12000);
+  });
+  $('#updateDetails').addEventListener('click', () => api.invoke('update:open', pendingUpdate.page));
+  $('#updateLater').addEventListener('click', () => {
+    $('#updateBanner').hidden = true;
+    pendingUpdate = null;
+  });
+}
+
+function updateInstallHint() {
+  return state.info.platform === 'darwin'
+    ? 'Ouvrez le fichier téléchargé, puis glissez Projee dans Applications en remplaçant l’ancienne version.'
+    : 'Quittez Projee, puis lancez le fichier téléchargé : il remplace l’ancienne version, vos projets et réglages sont conservés.';
+}
+
 // ---------- Chronomètre et horloge ----------
 
 const chrono = { start: null, acc: 0 };
@@ -700,6 +746,7 @@ function bindUi() {
   $('#addTextBtn').addEventListener('click', addText);
   $('#lockBtn').addEventListener('click', toggleLock);
   $('#mireBtn').addEventListener('click', () => setMire(!mireOn));
+  bindUpdateBanner();
   $('#outputSelect').addEventListener('change', onOutputChange);
   $('#audioSelect').addEventListener('change', (e) => applyAudioSink(e.target.value));
 
@@ -751,6 +798,7 @@ function bindUi() {
         for (const c of state.cues) if (c.type === 'video') engine.cueUpdated(c);
         renderAll();
       }),
+      update: () => checkUpdates(true),
       shortcuts: openShortcuts,
       about: () => openAbout(state.info),
     }[action];
@@ -896,9 +944,15 @@ async function start() {
   if (await api.invoke('output:isReady')) await onOutputReady();
 
   if (state.info.selftest) {
-    selftestHook = await runSelftest({ state, engine, actions, addVideos, rt, editCue });
+    const previewUpdate = (r) => {
+      pendingUpdate = r;
+      showUpdateBanner();
+    };
+    selftestHook = await runSelftest({ state, engine, actions, addVideos, rt, editCue, previewUpdate });
     return;
   }
+
+  if (state.settings.checkUpdates) setTimeout(() => checkUpdates(false), 3000);
 
   const toOpen = state.info.pendingOpen || state.settings.lastProject;
   if (toOpen) {

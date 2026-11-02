@@ -20,6 +20,7 @@ const DEFAULTS = {
   mode: 'single',            // 'single' (un GO par vidéo) | 'playlist' (enchaîne toute la liste)
   masterVolume: 1,
   preview: true,             // retour vidéo dans la fenêtre de régie
+  checkUpdates: true,        // recherche d'une nouvelle version au lancement
   lastProject: null,
   controlBounds: null,
 };

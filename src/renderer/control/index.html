@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="app.css">
 </head>
 <body>
+  <div class="top">
   <header class="topbar">
     <button class="icon-btn" id="menuBtn" title="Menu">☰</button>
     <div class="brand">Projee</div>
@@ -23,6 +24,13 @@
     <button class="btn edit-only" id="mireBtn" title="Affiche une mire sur la sortie vidéo pour vérifier l'écran et le cadrage">Mire</button>
     <button class="icon-btn" id="lockBtn" title="Verrouiller le mode spectacle">🔓</button>
   </header>
+  <div id="updateBanner" class="update-banner" hidden>
+    <span id="updateText"></span>
+    <button class="btn primary" id="updateDownload">Télécharger</button>
+    <button class="btn" id="updateDetails">Nouveautés</button>
+    <button class="btn" id="updateLater">Plus tard</button>
+  </div>
+  </div>
 
   <div id="menu" class="popover" hidden>
     <button data-action="new" class="edit-only">Nouveau projet</button>
@@ -32,6 +40,7 @@
     <button data-action="export">Exporter avec les vidéos…</button>
     <hr>
     <button data-action="settings" class="edit-only">Réglages…</button>
+    <button data-action="update">Rechercher une mise à jour</button>
     <button data-action="shortcuts">Raccourcis clavier</button>
     <button data-action="about">À propos</button>
   </div>

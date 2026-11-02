@@ -1,11 +1,12 @@
 'use strict';
 // Processus principal : fenêtre de régie, fenêtre de sortie (projecteur), écrans, fichiers.
-const { app, BrowserWindow, ipcMain, screen, dialog, powerSaveBlocker, session, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, dialog, powerSaveBlocker, session, Menu, shell } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const { registerMediaScheme, handleMediaProtocol } = require('./media-protocol');
 const settings = require('./settings');
 const project = require('./project');
+const updates = require('./updates');
 
 const isMac = process.platform === 'darwin';
 const SELFTEST = process.argv.includes('--selftest');
@@ -229,6 +230,12 @@ function registerIpc() {
     control?.close();
   });
   ipcMain.handle('dialog:message', (_e, opts) => dialog.showMessageBox(control, opts));
+
+  ipcMain.handle('update:check', () => updates.check());
+  ipcMain.handle('update:open', (_e, url) => {
+    if (updates.isAllowedUrl(url)) shell.openExternal(url);
+  });
+  ipcMain.handle('update:releasesPage', () => shell.openExternal(updates.releasesPage));
 
   ipcMain.handle('settings:get', () => settings.get());
   ipcMain.handle('settings:set', (_e, patch) => settings.set(patch));
