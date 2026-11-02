@@ -62,10 +62,11 @@ xattr -cr /Applications/Projee.app
 
    | Icône | À la fin de la vidéo |
    |---|---|
-   | ■ | Retour au noir (par défaut) |
+   | ■ | Retour au noir, on attend le GO suivant (par défaut) |
+   | ■→ | Noir un court instant (1 s par défaut), puis la vidéo suivante démarre toute seule |
+   | →\| | La vidéo suivante s'enchaîne aussitôt, sans passer par le noir |
    | 🖼 | L'image reste figée jusqu'au GO suivant |
    | 🔁 | La vidéo boucle (fond d'attente) jusqu'au GO suivant ou au Stop |
-   | →\| | La vidéo suivante s'enchaîne aussitôt, sans passer par le noir |
 
 6. **Enregistrez** le projet (menu ☰ → *Enregistrer*, ou Ctrl+S). Il se rouvre tout seul au prochain lancement.
 
@@ -88,10 +89,17 @@ xattr -cr /Applications/Projee.app
 - Le **cadenas** verrouille le mode spectacle : plus aucune modification possible par erreur. Le GO et les boutons de sécurité restent actifs.
 - En bas à droite : l'horloge et un chronomètre (clic pour démarrer ou arrêter, double-clic pour remettre à zéro).
 
-### Lecture seule ou playlist
+### Un GO par vidéo, ou une playlist
 
-- **Lecture seule** : un GO par vidéo. Entre deux vidéos, le projecteur reste noir jusqu'au GO suivant.
-- **Playlist** : un seul GO lance toute la liste, qui s'enchaîne jusqu'au bout (avec un temps de noir réglable entre deux vidéos).
+C'est la fin de chaque vidéo qui décide de la suite :
+
+- **Un GO par vidéo** : laissez les vidéos sur ■. Entre deux vidéos, le projecteur reste noir jusqu'au GO suivant.
+- **Playlist** : mettez les vidéos sur ■→ (avec un noir entre chaque) ou →| (sans noir). Un seul GO lance alors
+  toute la suite, qui s'enchaîne jusqu'à la prochaine vidéo réglée sur ■, ou jusqu'au bout de la conduite.
+- On peut mélanger : par exemple trois vidéos enchaînées pour l'ouverture, puis un GO par vidéo pour la suite.
+
+Le menu **Fin pour toutes…**, au-dessus de la conduite, règle toutes les vidéos d'un coup.
+La durée du noir de ■→ se règle dans *menu ☰ → Réglages*.
 
 ## Régler une vidéo
 

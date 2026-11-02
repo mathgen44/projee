@@ -89,6 +89,22 @@ export async function runSelftest({ state, engine, actions, addVideos, rt, editC
       await sleep(40);
       await shot('09-noir-immediat');
 
+      c1.endAction = 'blackNext';
+      engine.cueUpdated(c1);
+      engine.setStandby(c1.id);
+      await waitFor('vidéo 1 prête', () => armed(c1));
+      actions.go();
+      log('GO vidéo 1 (noir puis suivante)');
+      await waitFor('fin vidéo 1', () => engine.current === null);
+      await sleep(300);
+      await shot('09b-noir-entre-deux');
+      await waitFor('vidéo 2 lancée seule', () => engine.currentCue === c2);
+      log('vidéo 2 lancée automatiquement');
+      await sleep(500);
+      await shot('09c-suivante-automatique');
+      actions.black();
+      await sleep(40);
+
       c3.endAction = 'hold';
       engine.cueUpdated(c3);
       engine.setStandby(c3.id);

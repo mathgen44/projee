@@ -4,7 +4,7 @@ const { app } = require('electron');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const VERSION = 2;
+const VERSION = 3;
 
 const DEFAULTS = {
   version: VERSION,
@@ -16,8 +16,7 @@ const DEFAULTS = {
   fadeToBlack: 2,            // secondes, bouton « Fondu au noir »
   stopFade: 0.3,             // secondes, bouton « Stop »
   pauseOnBlack: false,       // la pause masque l'image au lieu de la figer
-  playlistGap: 0,            // secondes de noir entre deux vidéos en mode playlist
-  mode: 'single',            // 'single' (un GO par vidéo) | 'playlist' (enchaîne toute la liste)
+  playlistGap: 1,            // secondes de noir avant la suivante, pour les vidéos « noir puis suivante »
   masterVolume: 1,
   preview: true,             // retour vidéo dans la fenêtre de régie
   checkUpdates: true,        // recherche d'une nouvelle version au lancement
@@ -44,6 +43,12 @@ function migrate(saved) {
     // Version 1 : les fondus valaient 0,5 s par défaut ; ils sont désormais à 0.
     if (saved.fadeIn === 0.5) saved.fadeIn = 0;
     if (saved.fadeOut === 0.5) saved.fadeOut = 0;
+  }
+  if (!saved.version || saved.version < 3) {
+    // Version 3 : plus de mode « playlist » global, chaque vidéo choisit sa fin ;
+    // le noir avant la suivante passe de 0 à 1 s par défaut.
+    delete saved.mode;
+    if (saved.playlistGap === 0) saved.playlistGap = 1;
   }
   return { ...DEFAULTS, ...saved, version: VERSION };
 }

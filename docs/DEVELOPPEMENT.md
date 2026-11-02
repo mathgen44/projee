@@ -26,6 +26,12 @@ ffmpeg -f lavfi -i testsrc2=s=1280x720:r=30:d=4 -f lavfi -i sine=f=440:d=4 -c:v 
 ```
 
 Ajoutez `--selftest-display` pour tester en plein écran sur le second écran plutôt qu'en fenêtre.
+
+Pour tester l'application construite (elle ne peut pas écrire en elle-même), indiquez un dossier de sortie :
+
+```bash
+dist/win-unpacked/Projee.exe --selftest --selftest-media=test-media --selftest-out=selftest-out
+```
 La fenêtre de régie est alors réduite à 1280×700 pour vérifier l'affichage sur un petit écran.
 
 ## Construire les installateurs

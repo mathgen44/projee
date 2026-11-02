@@ -2,7 +2,7 @@
 import { $, $$, el, fmtTime, toast, uid } from './util.js';
 import { Engine } from './engine.js';
 import { probe } from './media.js';
-import { openCueEditor, END_ICONS, endIconSvg } from './editor.js';
+import { openCueEditor, END_ACTIONS, END_ICONS, endIconSvg } from './editor.js';
 import { openSettings, openShortcuts, openAbout } from './dialogs.js';
 import { runSelftest } from './selftest.js';
 
@@ -396,6 +396,20 @@ function setEndAction(cue, action) {
   engine.cueUpdated(cue);
 }
 
+// « Fin pour toutes » : par exemple toute la conduite en playlist d'un seul geste.
+function setAllEndActions(action) {
+  if (state.locked) return;
+  const videos = state.cues.filter((c) => c.type === 'video');
+  if (!videos.length) return;
+  for (const cue of videos) {
+    cue.endAction = action;
+    engine.cueUpdated(cue);
+  }
+  setDirty();
+  const label = END_ACTIONS.find(([a]) => a === action)[1];
+  toast(`Fin de toutes les vidéos : ${label.toLowerCase()}.`, 'ok', 3000);
+}
+
 function renderNow() {
   const cue = engine.currentCue;
   const st = engine.currentState;
@@ -426,7 +440,6 @@ function renderTransport() {
   $('#pauseBtn').textContent = st === 'paused' ? '▶ Reprendre' : '⏸ Pause';
   $('#stopBtn').disabled = !engine.isActive();
   $('#fadeBtn').disabled = !engine.isActive();
-  $$('.mode button').forEach((b) => b.classList.toggle('active', b.dataset.mode === state.settings.mode));
 }
 
 function renderTime(ev) {
@@ -750,10 +763,12 @@ function bindUi() {
   $('#outputSelect').addEventListener('change', onOutputChange);
   $('#audioSelect').addEventListener('change', (e) => applyAudioSink(e.target.value));
 
-  $$('.mode button').forEach((b) => b.addEventListener('click', async () => {
-    state.settings = await api.invoke('settings:set', { mode: b.dataset.mode });
-    renderTransport();
-  }));
+  for (const [value, label] of END_ACTIONS) $('#allEndSelect').append(el('option', { value }, label));
+  $('#allEndSelect').addEventListener('change', (e) => {
+    const action = e.target.value;
+    e.target.value = '';
+    if (action) setAllEndActions(action);
+  });
 
   const vol = $('#masterVolume');
   vol.value = state.settings.masterVolume;

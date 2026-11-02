@@ -199,7 +199,7 @@ class Slot {
     const end = this.end;
     if (!isFinite(end)) return;
     const { endAction, fadeOut } = this.cfg;
-    if (endAction === 'black' || (endAction === 'next' && !this.chainReady())) {
+    if (endAction === 'black' || endAction === 'blackNext' || (endAction === 'next' && !this.chainReady())) {
       if (fadeOut > 0 && t >= end - fadeOut) this.fadeToBlack(Math.max(0.05, end - t), 'end');
       else if (t >= end - END_EPSILON) this.fadeToBlack(0, 'end');
     } else if (t >= end - END_EPSILON) {

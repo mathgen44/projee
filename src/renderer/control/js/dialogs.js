@@ -22,7 +22,7 @@ export function openSettings(settings, info, onSave) {
           <option value="false" ${!settings.pauseOnBlack ? 'selected' : ''}>Fige l'image sur le projecteur</option>
           <option value="true" ${settings.pauseOnBlack ? 'selected' : ''}>Passe au noir pendant la pause</option>
         </select></label>
-        ${num('playlistGap', 'Noir entre deux vidéos (s)', 'En mode playlist, durée du noir avant la vidéo suivante.', 0.5)}
+        ${num('playlistGap', 'Noir avant la suivante (s)', 'Pour les vidéos réglées sur « noir, puis vidéo suivante automatiquement ».', 0.5)}
         <label class="row"><span>Retour vidéo</span><select name="preview">
           <option value="true" ${settings.preview ? 'selected' : ''}>Affiché dans la régie</option>
           <option value="false" ${!settings.preview ? 'selected' : ''}>Désactivé (économise le processeur)</option>

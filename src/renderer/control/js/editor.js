@@ -1,11 +1,12 @@
 // Fenêtre de réglage d'une vidéo ou d'une ligne de texte de la conduite.
 import { $, escapeHtml, fmtInputTime, fmtTime, parseTime, toast } from './util.js';
 
-const END_ACTIONS = [
-  ['black', 'Retour au noir'],
-  ['hold', 'Figer la dernière image'],
-  ['loop', 'Boucle (jusqu’au GO suivant ou Stop)'],
-  ['next', 'Enchaîner sur la suivante sans noir'],
+export const END_ACTIONS = [
+  ['black', 'Retour au noir, attendre le GO'],
+  ['blackNext', 'Noir, puis vidéo suivante automatiquement'],
+  ['next', 'Enchaîner sur la suivante, sans noir'],
+  ['hold', 'Figer la dernière image jusqu’au GO'],
+  ['loop', 'Boucle jusqu’au GO ou au Stop'],
 ];
 
 const FITS = [
@@ -139,10 +140,11 @@ export function openCueEditor(cue, runtime, settings, onSave) {
 
 // Icônes des actions de fin, affichées sur chaque vidéo de la conduite.
 export const END_ICONS = [
-  ['black', 'Fin : retour au noir', '<rect x="3" y="3" width="14" height="14" rx="2" fill="currentColor"/>'],
-  ['hold', 'Fin : figer la dernière image', '<rect x="2.5" y="4" width="15" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 13.5l3.5-4 2.5 2.5 1.8-1.8 2.7 3.3z" fill="currentColor"/><circle cx="13.5" cy="7.3" r="1.3" fill="currentColor"/>'],
+  ['black', 'Fin : retour au noir, attendre le GO', '<rect x="3" y="3" width="14" height="14" rx="2" fill="currentColor"/>'],
+  ['blackNext', 'Fin : noir, puis vidéo suivante automatiquement', '<rect x="1.5" y="5" width="9" height="10" rx="1.5" fill="currentColor"/><path d="M12.5 10h5M15.3 7.3L18 10l-2.7 2.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'],
+  ['next', 'Fin : enchaîner sur la vidéo suivante, sans noir', '<path d="M3 10h10M9.5 5.5L14 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.5 4.5v11" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>'],
+  ['hold', 'Fin : figer la dernière image jusqu’au GO', '<rect x="2.5" y="4" width="15" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 13.5l3.5-4 2.5 2.5 1.8-1.8 2.7 3.3z" fill="currentColor"/><circle cx="13.5" cy="7.3" r="1.3" fill="currentColor"/>'],
   ['loop', 'Fin : boucle jusqu’au GO suivant ou Stop', '<path d="M15.5 8A5.5 5.5 0 0 0 5 6.2M4.5 12A5.5 5.5 0 0 0 15 13.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3.5 3v4h4M16.5 17v-4h-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'],
-  ['next', 'Fin : enchaîner sur la vidéo suivante sans noir', '<path d="M3 10h10M9.5 5.5L14 10l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.5 4.5v11" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>'],
 ];
 
 export function endIconSvg(action) {

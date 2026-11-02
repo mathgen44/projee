@@ -430,19 +430,6 @@ body.locked .progress { cursor: default; }
 .tbtn.danger { background: #3a1d20; border-color: var(--danger); }
 .tbtn.danger:hover { background: var(--danger); }
 
-.mode {
-  display: flex;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  overflow: hidden;
-}
-.mode button {
-  background: var(--panel-2);
-  border: 0;
-  padding: 8px 12px;
-}
-.mode button.active { background: var(--accent); }
-
 .volume { display: flex; align-items: center; gap: 6px; }
 .volume input { width: 110px; }
 

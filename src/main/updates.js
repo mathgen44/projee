@@ -3,9 +3,11 @@
 // Rien n'est installé automatiquement : on propose seulement le téléchargement,
 // pour ne jamais modifier l'application pendant un spectacle.
 const { app, net } = require('electron');
-const pkg = require('../../package.json');
 
-const { owner, repo } = pkg.build.publish[0];
+// Même dépôt que « build.publish » dans package.json. Ne pas le relire de package.json :
+// electron-builder retire la section « build » du fichier embarqué dans l'application.
+const owner = 'mathgen44';
+const repo = 'projee';
 const API = `https://api.github.com/repos/${owner}/${repo}/releases/latest`;
 const PAGE_PREFIX = `https://github.com/${owner}/${repo}/`;
 

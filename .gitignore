@@ -3,3 +3,4 @@ dist/
 test-media*/
 selftest-out/
 *.log
+dist-test/

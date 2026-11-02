@@ -11,6 +11,12 @@ const updates = require('./updates');
 const isMac = process.platform === 'darwin';
 const SELFTEST = process.argv.includes('--selftest');
 const selftestMediaArg = process.argv.find((a) => a.startsWith('--selftest-media='));
+const selftestOutArg = process.argv.find((a) => a.startsWith('--selftest-out='));
+
+// Dossier des captures du test automatique (l'application construite ne peut pas écrire en elle-même).
+function selftestDir() {
+  return selftestOutArg ? selftestOutArg.split('=').slice(1).join('=') : path.join(app.getAppPath(), 'selftest-out');
+}
 
 registerMediaScheme();
 
@@ -310,7 +316,7 @@ function registerIpc() {
   });
 
   ipcMain.handle('selftest:capture', async (_e, name) => {
-    const dir = path.join(app.getAppPath(), 'selftest-out');
+    const dir = selftestDir();
     fs.mkdirSync(dir, { recursive: true });
     const shots = [];
     for (const [win, suffix] of [[output, 'sortie'], [control, 'regie']]) {
@@ -338,7 +344,7 @@ function registerIpc() {
     displays: screen.getAllDisplays().map((d) => ({ label: d.label, bounds: d.bounds })),
   }));
   ipcMain.handle('selftest:log', (_e, line) => {
-    const dir = path.join(app.getAppPath(), 'selftest-out');
+    const dir = selftestDir();
     fs.mkdirSync(dir, { recursive: true });
     fs.appendFileSync(path.join(dir, 'selftest.log'), line + '\n');
   });

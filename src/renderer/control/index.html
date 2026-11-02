@@ -51,6 +51,9 @@
         <h2>Conduite</h2>
         <span id="totalDuration" class="muted"></span>
         <div class="spacer"></div>
+        <select id="allEndSelect" class="edit-only" title="Régler d'un coup la fin de toutes les vidéos (par exemple toute la conduite en playlist)">
+          <option value="">Fin pour toutes…</option>
+        </select>
         <button class="btn edit-only" id="addVideosBtn">+ Vidéos</button>
         <button class="btn edit-only" id="addTextBtn">+ Texte</button>
       </div>
@@ -101,10 +104,6 @@
     <button id="fadeBtn" class="tbtn" title="Fondu au noir de l'image et du son (Échap)">◐ Fondu au noir</button>
     <button id="blackBtn" class="tbtn danger" title="Noir immédiat, image et son coupés (Maj+Échap)">■ NOIR</button>
     <div class="spacer"></div>
-    <div class="mode" title="Lecture seule : un GO par vidéo. Playlist : toute la liste s'enchaîne.">
-      <button data-mode="single">Lecture seule</button>
-      <button data-mode="playlist">Playlist</button>
-    </div>
     <label class="volume" title="Volume général">🔊 <input id="masterVolume" type="range" min="0" max="1" step="0.01"></label>
     <div class="clocks">
       <div id="clock" class="clock">00:00:00</div>

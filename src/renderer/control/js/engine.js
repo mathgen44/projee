@@ -282,9 +282,12 @@ export class Engine {
         slot.state = 'done';
         if (ev.slot === this.current && !ev.chained) {
           this.current = null;
-          const s = this.getSettings();
-          if (ev.type === 'ended' && s.mode === 'playlist' && this.standbyId) {
-            this.playlistTimer = setTimeout(() => this.go(), Math.max(0, s.playlistGap) * 1000);
+          // Fin réglée pour enchaîner : on lance la vidéo en attente, après le noir prévu.
+          // (« next » arrive ici seulement si la suivante n'était pas prête à temps.)
+          const endAction = this.cue(ev.cueId)?.endAction;
+          if (ev.type === 'ended' && this.standbyId && (endAction === 'blackNext' || endAction === 'next')) {
+            const gap = endAction === 'blackNext' ? Math.max(0, this.getSettings().playlistGap) : 0;
+            this.playlistTimer = setTimeout(() => this.go(), gap * 1000);
           }
         }
         this.onEvent(ev);
