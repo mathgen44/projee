@@ -15,7 +15,7 @@ De la même famille que [Jinglee](https://github.com/mathgen44/jinglee), le lect
 - **Conduite** avec un grand bouton **GO** : la vidéo en attente est surlignée, avec ses notes de régie.
   Elle est préparée à l'avance (calée sur sa première image, invisible) pour un départ instantané.
 - **Lecture seule** (un GO par vidéo) ou **Playlist** (toute la liste s'enchaîne, avec un noir réglable entre deux vidéos).
-- **Fondus** depuis le noir et vers le noir, image et son ensemble (0,5 s par défaut, réglables vidéo par vidéo, 0 = coupe franche).
+- **Fondus** depuis le noir et vers le noir, image et son ensemble : coupe franche par défaut (0 s), durée réglable en général et vidéo par vidéo.
 - **Pause** (l'image reste figée, ou passe au noir selon le réglage), **Stop** (fondu court),
   **Fondu au noir** (fondu long), **NOIR** (coupure immédiate de l'image et du son).
 - **Retour vidéo** : la régie montre ce qui passe sur le projecteur, avec le temps écoulé, le **temps restant en grand**,
@@ -28,6 +28,7 @@ De la même famille que [Jinglee](https://github.com/mathgen44/jinglee), le lect
 
 ### Réglages de chaque vidéo
 
+- **Action de fin choisie d'un clic** sur l'icône de la vidéo dans la conduite.
 - Nom, **début et fin** (pour couper sans retoucher le fichier), volume (0 à 200 %).
 - Fondus d'entrée et de sortie propres.
 - **À la fin** : retour au noir (par défaut), figer la dernière image, boucle (fond d'attente jusqu'au GO suivant),

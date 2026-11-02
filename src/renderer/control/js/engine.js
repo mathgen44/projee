@@ -131,7 +131,7 @@ export class Engine {
     const p = this.params(cue);
     if (this.current && ACTIVE.includes(this.slots[this.current].state) && this.slots[this.current].state !== 'ending') {
       const prev = this.cue(this.slots[this.current].cueId);
-      this.send({ type: 'fadeToBlack', slot: this.current, duration: prev ? this.params(prev).fadeOut : 0.5 });
+      this.send({ type: 'fadeToBlack', slot: this.current, duration: prev ? this.params(prev).fadeOut : 0 });
       this.slots[this.current].state = 'ending';
     }
     this.send({ type: 'mire', on: false });

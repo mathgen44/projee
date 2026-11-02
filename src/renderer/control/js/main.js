@@ -2,7 +2,7 @@
 import { $, $$, el, fmtTime, toast, uid } from './util.js';
 import { Engine } from './engine.js';
 import { probe } from './media.js';
-import { openCueEditor, endActionLabel } from './editor.js';
+import { openCueEditor, END_ICONS, endIconSvg } from './editor.js';
 import { openSettings, openShortcuts, openAbout } from './dialogs.js';
 import { runSelftest } from './selftest.js';
 
@@ -334,7 +334,6 @@ function renderCues() {
     else {
       meta.push(fmtTime(dur));
       if (r.width) meta.push(`${r.width}×${r.height}`);
-      meta.push(endActionLabel(p.endAction));
       if (cue.inPoint || cue.outPoint != null) meta.push('✂ coupée');
       if ((cue.volume ?? 1) !== 1) meta.push(`vol. ${Math.round(cue.volume * 100)} %`);
     }
@@ -345,11 +344,11 @@ function renderCues() {
       draggable: !state.locked,
       dataset: { idx, id: cue.id },
       onclick: (e) => {
-        if (e.target.closest('.actions')) return;
+        if (e.target.closest('.actions, .ends')) return;
         if (isPlayable(cue)) engine.setStandby(cue.id);
       },
       ondblclick: (e) => {
-        if (e.target.closest('.actions')) return;
+        if (e.target.closest('.actions, .ends')) return;
         if (isPlayable(cue)) {
           engine.setStandby(cue.id);
           engine.go();
@@ -363,6 +362,7 @@ function renderCues() {
         cue.id === engine.standbyId ? el('span', { class: 'badge', text: engine.pendingGo ? 'préparation…' : 'en attente' }) : null,
         cue.id === currentId ? el('span', { class: 'badge', text: 'à l’antenne' }) : null),
       el('div', { class: 'meta', text: meta.join(' · ') })),
+    endButtons(cue, p.endAction),
     el('div', { class: 'actions' },
       r.status === 'missing' ? el('button', { class: 'edit-only', onclick: () => relink(cue) }, 'Relier…') : null,
       el('button', { class: 'edit-only', title: 'Réglages', onclick: () => editCue(cue) }, '✎'),
@@ -371,6 +371,29 @@ function renderCues() {
   });
   $('#emptyHint').hidden = state.cues.length > 0;
   $('#totalDuration').textContent = n ? `${n} vidéo${n > 1 ? 's' : ''} · ${fmtTime(total)}` : '';
+}
+
+// Choix de l'action de fin directement depuis la conduite.
+function endButtons(cue, current) {
+  const group = el('div', { class: 'ends' });
+  for (const [action, title] of END_ICONS) {
+    const b = el('button', {
+      class: `end-btn${action === current ? ' active' : ''}`,
+      title,
+      'aria-pressed': String(action === current),
+      onclick: () => setEndAction(cue, action),
+    });
+    b.innerHTML = endIconSvg(action);
+    group.append(b);
+  }
+  return group;
+}
+
+function setEndAction(cue, action) {
+  if (state.locked || cue.endAction === action) return;
+  cue.endAction = action;
+  setDirty();
+  engine.cueUpdated(cue);
 }
 
 function renderNow() {
@@ -873,7 +896,7 @@ async function start() {
   if (await api.invoke('output:isReady')) await onOutputReady();
 
   if (state.info.selftest) {
-    selftestHook = await runSelftest({ state, engine, actions, addVideos, rt });
+    selftestHook = await runSelftest({ state, engine, actions, addVideos, rt, editCue });
     return;
   }
 

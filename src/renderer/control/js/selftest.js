@@ -2,7 +2,7 @@
 // importants et capture les deux fenêtres, avec la luminosité moyenne de la sortie,
 // pour vérifier que le projecteur reste noir quand il le doit.
 
-export async function runSelftest({ state, engine, actions, addVideos, rt }) {
+export async function runSelftest({ state, engine, actions, addVideos, rt, editCue }) {
   const api = window.projee;
   const t0 = performance.now();
   const log = (m) => api.invoke('selftest:log', `${((performance.now() - t0) / 1000).toFixed(2)}s ${m}`);
@@ -35,6 +35,17 @@ export async function runSelftest({ state, engine, actions, addVideos, rt }) {
       const [c1, c2, c3] = state.cues;
       await waitFor('vidéo 1 prête', () => armed(c1));
       await shot('02-prete-mais-noir');
+
+      editCue(c1);
+      await sleep(600);
+      const body = document.querySelector('#cueDialog .body');
+      const footer = document.querySelector('#cueDialog footer').getBoundingClientRect();
+      log(`réglages : contenu ${body.scrollHeight}px, visible ${body.clientHeight}px, boutons en bas à ${Math.round(footer.bottom)}px / fenêtre ${window.innerHeight}px`);
+      await shot('02b-reglages-video');
+      body.scrollTop = body.scrollHeight;
+      await sleep(100);
+      await shot('02c-reglages-video-bas');
+      document.getElementById('cueDialog').close();
 
       actions.go();
       log('GO vidéo 1');

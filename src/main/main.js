@@ -154,8 +154,11 @@ function createControlWindow() {
     minWidth: 900,
     minHeight: 600,
     ...(saved && !SELFTEST ? saved : {}),
+    // Le test automatique se place sur un petit écran (portable) pour vérifier que tout reste accessible.
+    ...(SELFTEST ? { width: 1280, height: 700 } : {}),
     backgroundColor: '#15171c',
     title: 'Projee',
+    icon: path.join(__dirname, '..', 'assets', 'icon.png'),
     show: false,
     webPreferences: {
       preload: path.join(__dirname, '..', 'preload', 'control.js'),
