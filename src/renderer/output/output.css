@@ -1,0 +1,34 @@
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  cursor: none;
+  user-select: none;
+}
+
+video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#mire {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+/* Mode « fenêtre de test » : on peut déplacer la fenêtre en la faisant glisser. */
+body.windowed {
+  cursor: move;
+  -webkit-app-region: drag;
+}

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; media-src projee-media:; img-src 'self' data:; style-src 'self'; script-src 'self'">
+  <title>Projee</title>
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="icon-btn" id="menuBtn" title="Menu">☰</button>
+    <div class="brand">Projee</div>
+    <div class="project-name"><span id="projectName">Nouveau spectacle</span><span id="dirtyMark" class="dirty" hidden>●</span></div>
+    <div class="spacer"></div>
+    <label class="field" title="Écran sur lequel la vidéo est projetée">
+      <span>Sortie vidéo</span>
+      <select id="outputSelect" class="edit-only-disable"></select>
+    </label>
+    <label class="field" title="Carte son ou sortie utilisée pour le son des vidéos">
+      <span>Sortie son</span>
+      <select id="audioSelect" class="edit-only-disable"></select>
+    </label>
+    <button class="btn edit-only" id="mireBtn" title="Affiche une mire sur la sortie vidéo pour vérifier l'écran et le cadrage">Mire</button>
+    <button class="icon-btn" id="lockBtn" title="Verrouiller le mode spectacle">🔓</button>
+  </header>
+
+  <div id="menu" class="popover" hidden>
+    <button data-action="new" class="edit-only">Nouveau projet</button>
+    <button data-action="open" class="edit-only">Ouvrir…</button>
+    <button data-action="save">Enregistrer <kbd>Ctrl+S</kbd></button>
+    <button data-action="saveAs">Enregistrer sous…</button>
+    <button data-action="export">Exporter avec les vidéos…</button>
+    <hr>
+    <button data-action="settings" class="edit-only">Réglages…</button>
+    <button data-action="shortcuts">Raccourcis clavier</button>
+    <button data-action="about">À propos</button>
+  </div>
+
+  <main class="layout">
+    <section class="cues">
+      <div class="cues-toolbar">
+        <h2>Conduite</h2>
+        <span id="totalDuration" class="muted"></span>
+        <div class="spacer"></div>
+        <button class="btn edit-only" id="addVideosBtn">+ Vidéos</button>
+        <button class="btn edit-only" id="addTextBtn">+ Texte</button>
+      </div>
+      <ol id="cueList" class="cue-list"></ol>
+      <div id="emptyHint" class="empty-hint">
+        <p>Glissez des vidéos ici ou cliquez sur <strong>+ Vidéos</strong>.</p>
+        <p class="muted">Formats conseillés : MP4 (H.264 ou HEVC), WebM.</p>
+      </div>
+    </section>
+
+    <section class="monitor">
+      <div class="preview-box">
+        <video id="preview" muted playsinline></video>
+        <div class="preview-label">Retour sortie</div>
+        <div id="previewOff" class="preview-off" hidden>Retour vidéo désactivé</div>
+        <div id="outputWarning" class="output-warning" hidden></div>
+      </div>
+
+      <div class="now">
+        <div class="now-head">
+          <span id="nowState" class="state-badge state-black">NOIR</span>
+          <span id="nowName" class="now-name">—</span>
+        </div>
+        <div class="times">
+          <span id="elapsed" class="elapsed">0:00</span>
+          <span id="remaining" class="remaining">-0:00.0</span>
+          <span id="durationLabel" class="muted"></span>
+        </div>
+        <div id="progress" class="progress"><div id="progressFill" class="progress-fill"></div></div>
+        <div class="meters" title="Niveau du son envoyé à la sortie son">
+          <div class="meter"><div id="meterL" class="meter-fill"></div></div>
+          <div class="meter"><div id="meterR" class="meter-fill"></div></div>
+        </div>
+      </div>
+
+      <div class="standby">
+        <div class="standby-title">En attente</div>
+        <div id="standbyName" class="standby-name">—</div>
+        <div id="standbyNotes" class="standby-notes"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="transport">
+    <button id="goBtn" class="go" title="Lancer la vidéo en attente (Espace)">GO</button>
+    <button id="pauseBtn" class="tbtn" title="Pause / reprise (P)">⏸ Pause</button>
+    <button id="stopBtn" class="tbtn" title="Arrêt avec un fondu court (S)">⏹ Stop</button>
+    <button id="fadeBtn" class="tbtn" title="Fondu au noir de l'image et du son (Échap)">◐ Fondu au noir</button>
+    <button id="blackBtn" class="tbtn danger" title="Noir immédiat, image et son coupés (Maj+Échap)">■ NOIR</button>
+    <div class="spacer"></div>
+    <div class="mode" title="Lecture seule : un GO par vidéo. Playlist : toute la liste s'enchaîne.">
+      <button data-mode="single">Lecture seule</button>
+      <button data-mode="playlist">Playlist</button>
+    </div>
+    <label class="volume" title="Volume général">🔊 <input id="masterVolume" type="range" min="0" max="1" step="0.01"></label>
+    <div class="clocks">
+      <div id="clock" class="clock">00:00:00</div>
+      <div id="chrono" class="chrono" title="Chronomètre : clic pour démarrer ou arrêter, double-clic pour remettre à zéro">00:00:00</div>
+    </div>
+  </footer>
+
+  <div id="toasts" class="toasts"></div>
+
+  <dialog id="cueDialog" class="dialog"></dialog>
+  <dialog id="settingsDialog" class="dialog"></dialog>
+  <dialog id="infoDialog" class="dialog"></dialog>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
