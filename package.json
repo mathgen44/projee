@@ -1,7 +1,7 @@
 {
   "name": "projee",
   "productName": "Projee",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Lecteur vidéo de spectacle : conduite, GO, noir garanti avant et après chaque lecture, choix de la sortie vidéo et de la sortie son.",
   "main": "src/main/main.js",
   "author": "Hervé Sevellec",
