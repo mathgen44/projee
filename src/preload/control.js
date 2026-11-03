@@ -5,7 +5,8 @@ const EVENTS = ['out:event', 'output:status', 'displays:changed', 'app:closeRequ
 
 contextBridge.exposeInMainWorld('projee', {
   mediaUrl: (p) => 'projee-media://local/' + encodeURIComponent(p),
-  pathForFile: (file) => webUtils.getPathForFile(file),
+  // webUtils n'existe pas dans Electron 26 (édition macOS ancien) : la page lit alors file.path.
+  pathForFile: (file) => (webUtils ? webUtils.getPathForFile(file) : null),
   sendOutput: (cmd) => ipcRenderer.send('out:cmd', cmd),
   invoke: (channel, ...args) => ipcRenderer.invoke(channel, ...args),
   on: (channel, cb) => {

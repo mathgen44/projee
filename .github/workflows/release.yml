@@ -45,8 +45,27 @@ jobs:
           # Sans certificat Apple, l'app Mac reçoit une signature « ad hoc » (package.json, mac.identity).
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  # Édition « macOS ancien » (10.13 High Sierra à 11) : Electron 26, Mac Intel.
+  build-mac-ancien:
+    needs: draft
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Construire et envoyer l'image disque
+        run: npx electron-builder --mac --config electron-builder-legacy.js --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   publish:
-    needs: build
+    needs: [build, build-mac-ancien]
     runs-on: ubuntu-latest
     steps:
       - name: Publier la version

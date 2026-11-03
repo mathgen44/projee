@@ -923,7 +923,8 @@ function bindDragDrop() {
       dragIdx = null;
       return;
     }
-    const paths = [...e.dataTransfer.files].map((f) => api.pathForFile(f)).filter(Boolean);
+    // file.path : Electron 26 (édition macOS ancien) ; pathForFile : Electron récent.
+    const paths = [...e.dataTransfer.files].map((f) => f.path || api.pathForFile(f)).filter(Boolean);
     const projectFile = paths.find((p) => p.toLowerCase().endsWith('.projee'));
     if (projectFile) openProject(projectFile);
     else addVideos(paths, idx);

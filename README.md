@@ -19,6 +19,9 @@ De la même famille que [Jinglee](https://github.com/mathgen44/jinglee), le lect
 | Windows 10 ou 11 | `Projee-…-Windows-installation.exe` |
 | Windows, sans rien installer (clé USB, ordinateur prêté) | `Projee-…-Windows-portable.exe` |
 | Mac (Intel ou Apple Silicon), macOS 12 ou plus récent | `Projee-…-Mac.dmg` |
+| Mac plus ancien : macOS 10.13 High Sierra à macOS 11 Big Sur | `Projee-…-Mac-ancien.dmg` |
+
+Pour connaître votre version de macOS : menu Pomme (en haut à gauche de l'écran) → *À propos de ce Mac*.
 
 ### Installer sur Windows
 
@@ -39,6 +42,20 @@ La version **portable** se lance directement, sans installation.
    - **macOS 14 et plus ancien** : dans Applications, faites **Ctrl + clic** (ou clic droit) sur Projee → **Ouvrir**,
      puis **Ouvrir** dans le message.
 3. Les lancements suivants se font normalement.
+
+#### Édition macOS ancien (High Sierra à Big Sur)
+
+Elle s'installe de la même façon (Ctrl + clic → **Ouvrir** au premier lancement) et offre les mêmes fonctions,
+avec deux différences :
+
+- privilégiez des vidéos **MP4 en H.264** : le HEVC (H.265) n'est en général pas lu sur ces versions de macOS ;
+- ces Mac sont moins puissants : préférez la HD (1080p) à la 4K.
+
+Elle repose sur une version plus ancienne du moteur d'affichage, qui ne reçoit plus de correctifs de sécurité.
+Pour un lecteur hors-ligne qui ne lit que vos fichiers, c'est sans conséquence pratique ; si votre Mac peut passer
+à macOS 12 ou plus récent, prenez plutôt la version normale.
+
+#### Si le Mac refuse d'ouvrir Projee
 
 Si macOS indique que Projee « est endommagé et ne peut pas être ouvert », ouvrez l'application **Terminal**,
 collez la ligne suivante, appuyez sur Entrée, puis relancez Projee :

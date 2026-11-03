@@ -66,6 +66,29 @@ L'application Mac n'est pas signée par Apple : electron-builder lui donne une s
 suffisante pour que l'utilisateur l'autorise une fois dans les Réglages Système (voir le README).
 Avec un compte développeur Apple (99 $/an), on pourrait la signer et la faire notariser pour supprimer cette étape.
 
+## Édition macOS ancien
+
+Les Mac sous macOS 10.13 (High Sierra) à 11 (Big Sur) ne peuvent pas lancer Electron 38 (macOS 12 minimum).
+`electron-builder-legacy.js` reprend la configuration de `package.json` avec Electron 26.6.10, la dernière version
+compatible avec High Sierra, en x64 seulement. La publication automatique la construit en même temps que les autres
+(`Projee-…-Mac-ancien.dmg`).
+
+Le même code tourne sur les deux versions d'Electron. Ce qui diffère est isolé :
+
+- glisser-déposer : `file.path` (Electron 26) ou `webUtils.getPathForFile` (Electron récent) ;
+- mises à jour : `src/main/updates.js` propose l'image disque « ancien » à l'édition construite avec Electron 26.
+
+Avant d'utiliser dans le code une fonction d'Electron ou de Chromium apparue après Electron 26 (Chromium 116, Node 18),
+prévoyez une solution de repli, puis faites tourner le test automatique avec Electron 26 :
+
+```bash
+npm install --prefix ../electron26 electron@26.6.10
+```
+
+```bash
+../electron26/node_modules/electron/dist/electron.exe . --selftest --selftest-media=test-media
+```
+
 ## Icône
 
 ```bash

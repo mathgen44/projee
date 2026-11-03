@@ -84,7 +84,7 @@ export function openShortcuts() {
 
 export function openAbout(info) {
   showInfo('À propos de Projee', `
-    <p><strong>Projee ${escapeHtml(info.version)}</strong> — lecteur vidéo de spectacle.</p>
+    <p><strong>Projee ${escapeHtml(info.version)}</strong>${info.edition ? ` (édition ${escapeHtml(info.edition)})` : ''} — lecteur vidéo de spectacle.</p>
     <p>Le projecteur ne montre que du noir tant qu'aucune vidéo n'est lancée, et revient au noir à la fin de chaque lecture.</p>
     <p class="hint">Libre et gratuit (licence MIT). De la même famille que Jinglee.</p>`);
 }

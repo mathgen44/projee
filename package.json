@@ -12,7 +12,8 @@
     "start": "electron .",
     "selftest": "electron . --selftest",
     "dist:win": "electron-builder --win",
-    "dist:mac": "electron-builder --mac"
+    "dist:mac": "electron-builder --mac",
+    "dist:mac-ancien": "electron-builder --mac --config electron-builder-legacy.js"
   },
   "devDependencies": {
     "electron": "^38.0.0",

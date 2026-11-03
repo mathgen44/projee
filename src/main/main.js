@@ -222,6 +222,7 @@ function registerIpc() {
 
   ipcMain.handle('app:info', () => ({
     version: app.getVersion(),
+    edition: updates.LEGACY ? 'macOS ancien' : null,
     platform: process.platform,
     selftest: SELFTEST,
     selftestFiles: selftestMediaArg ? listMedia(selftestMediaArg.split('=').slice(1).join('=')) : [],

@@ -24,11 +24,15 @@ function isNewer(latest, current) {
   return false;
 }
 
+// L'édition « macOS ancien » (10.13 à 11) est construite avec Electron 26, la dernière version
+// compatible avec High Sierra ; elle doit proposer sa propre image disque.
+const LEGACY = parseInt(process.versions.electron, 10) < 27;
+
 // Fichier adapté à cet ordinateur : installateur, version portable ou image disque Mac.
 function pickAsset(assets) {
   const names = assets.map((a) => ({ a, n: a.name.toLowerCase() }));
   let match;
-  if (process.platform === 'darwin') match = names.find(({ n }) => n.endsWith('.dmg'));
+  if (process.platform === 'darwin') match = names.find(({ n }) => n.endsWith('.dmg') && n.includes('ancien') === LEGACY);
   else if (process.env.PORTABLE_EXECUTABLE_FILE) match = names.find(({ n }) => n.includes('portable') && n.endsWith('.exe'));
   else match = names.find(({ n }) => n.includes('installation') && n.endsWith('.exe'));
   return match ? match.a : null;
@@ -63,4 +67,4 @@ function isAllowedUrl(url) {
   return typeof url === 'string' && url.startsWith(PAGE_PREFIX);
 }
 
-module.exports = { check, isAllowedUrl, isNewer, releasesPage: `${PAGE_PREFIX}releases/latest` };
+module.exports = { check, isAllowedUrl, isNewer, LEGACY, releasesPage: `${PAGE_PREFIX}releases/latest` };
